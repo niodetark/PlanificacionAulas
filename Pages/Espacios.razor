@@ -1,0 +1,57 @@
+@page "/espacios"
+
+<PageTitle>Espacios</PageTitle>
+<div class="row" style="margin-bottom: 1rem">
+    <div class="col-12 col-md-6">
+        <RadzenText Text="Espacios" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+    </div>
+    <div class="col-12 col-md-6 justify-content-start justify-content-md-end" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem">
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px" Render=Grid0Render AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+            Data="@espacios"    TItem="PlanificacionAulas.Models.AulasYHorarios.Espacio" RowDoubleClick="@EditRow" RowSelect=@GetChildData>
+            <Columns>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Espacio" Property="EspacioId" Title="Espacio Id">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Espacio" Property="Nombre" Title="Nombre">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Espacio" Property="capacidad" Title="capacidad">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Espacio" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="espacio">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, espacio)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+                    <RadzenHeading Visible="@(espacio != null)" Size="H1" Text="Clases" />
+                    <RadzenButton Visible="@(espacio != null)" Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click=@(args => ClasesAddButtonClick(args,espacio)) />
+                    <RadzenDataGrid ColumnWidth="200px" Visible="@(espacio != null)" @ref=ClasesDataGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
+                      Data="@espacio?.Clases" TItem="PlanificacionAulas.Models.AulasYHorarios.Clase"  RowSelect="@(args => ClasesRowSelect(args, espacio))">
+                      <Columns>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="ClaseId" Title="Clase Id">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Inicio" Title="Inicio">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Fin" Title="Fin">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Espacio.Nombre" Title="Espacio">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="TblMateria.CodMateria" Title="Tbl Materia">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="claseChild">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Shade="Shade.Lighter" Variant="Variant.Flat"
+                                    Click=@(args => ClasesDeleteButtonClick(args, claseChild)) @onclick:stopPropagation="true" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                      </Columns>
+                </RadzenDataGrid>    </div>
+</div>

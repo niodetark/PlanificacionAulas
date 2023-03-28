@@ -1,0 +1,108 @@
+@page "/tbl-materia"
+
+<PageTitle>TblMateria</PageTitle>
+<div class="row" style="margin-bottom: 1rem">
+    <div class="col-12 col-md-6">
+        <RadzenText Text="TblMateria" TextStyle="TextStyle.H3" TagName="TagName.H1" style="margin: 0" />
+    </div>
+    <div class="col-12 col-md-6 justify-content-start justify-content-md-end" style="display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem">
+    <RadzenButton Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click="@AddButtonClick" Variant="Variant.Flat" />
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <RadzenDataGrid @ref="grid0" ColumnWidth="200px" Render=Grid0Render AllowFiltering="true" FilterMode="FilterMode.Advanced" AllowPaging="true" AllowSorting="true"
+            Data="@tblMateria"    TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" RowDoubleClick="@EditRow" RowSelect=@GetChildData>
+            <Columns>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="tblMateriaId" Title="tbl Materia Id">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="CodMateria" Title="Cod Materia">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="CodCarrera" Title="Cod Carrera">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="Plan" Title="Plan">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="Abreviatura" Title="Abreviatura">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="Nombre" Title="Nombre">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="AñoDeCursado" Title="Año De Cursado">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Property="Electiva" Title="Electiva">
+                </RadzenDataGridColumn>
+                <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMateria" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                    <Template Context="tblMateria">
+
+                        <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium"
+                            Shade="Shade.Lighter" Variant="Variant.Flat"
+                            Click=@(args => GridDeleteButtonClick(args, tblMateria)) @onclick:stopPropagation="true" />
+                    </Template>
+                </RadzenDataGridColumn>
+            </Columns>
+        </RadzenDataGrid>
+
+                    <RadzenHeading Visible="@(tblMateria != null)" Size="H1" Text="Clases" />
+                    <RadzenButton Visible="@(tblMateria != null)" Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click=@(args => ClasesAddButtonClick(args,tblMateria)) />
+                    <RadzenDataGrid ColumnWidth="200px" Visible="@(tblMateria != null)" @ref=ClasesDataGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
+                      Data="@tblMateria?.Clases" TItem="PlanificacionAulas.Models.AulasYHorarios.Clase"  RowSelect="@(args => ClasesRowSelect(args, tblMateria))">
+                      <Columns>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="ClaseId" Title="Clase Id">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Inicio" Title="Inicio">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Fin" Title="Fin">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="Espacio.Nombre" Title="Espacio">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Property="TblMateria.CodMateria" Title="Tbl Materia">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.Clase" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="claseChild">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Shade="Shade.Lighter" Variant="Variant.Flat"
+                                    Click=@(args => ClasesDeleteButtonClick(args, claseChild)) @onclick:stopPropagation="true" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                      </Columns>
+                </RadzenDataGrid>
+                    <RadzenHeading Visible="@(tblMateria != null)" Size="H1" Text="TblMatytalleres" />
+                    <RadzenButton Visible="@(tblMateria != null)" Icon="add_circle_outline" style="margin-bottom: 10px" Text="Add" Click=@(args => TblMatytalleresAddButtonClick(args,tblMateria)) />
+                    <RadzenDataGrid ColumnWidth="200px" Visible="@(tblMateria != null)" @ref=TblMatytalleresDataGrid AllowFiltering="true" FilterMode="Radzen.FilterMode.Advanced" AllowPaging="true" AllowSorting="true" 
+                      Data="@tblMateria?.TblMatytalleres" TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere"  RowSelect="@(args => TblMatytalleresRowSelect(args, tblMateria))">
+                      <Columns>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="IdMatyTaller" Title="Id Maty Taller">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="CodTaller" Title="Cod Taller">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="CodMateria" Title="Cod Materia">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="CodCarrera" Title="Cod Carrera">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="Plan" Title="Plan">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="NombMateria" Title="Nomb Materia">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="CantAlumnos" Title="Cant Alumnos">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="LegajoProfaCargo" Title="Legajo Profa Cargo">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="CargosProfeso" Title="Cargos Profeso">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="Resolución" Title="Resolución">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="Año" Title="Año">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="IdArea" Title="Id Area">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="Nombre1" Title="Nombre1">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Property="TblMateria.CodMateria" Title="Tbl Materia">
+                        </RadzenDataGridColumn>
+                        <RadzenDataGridColumn TItem="PlanificacionAulas.Models.AulasYHorarios.TblMatytallere" Filterable="false" Sortable="false" Width="70px" TextAlign="TextAlign.Center">
+                            <Template Context="tblMatytallereChild">
+                                <RadzenButton ButtonStyle="ButtonStyle.Danger" Icon="delete" Size="ButtonSize.Medium" Shade="Shade.Lighter" Variant="Variant.Flat"
+                                    Click=@(args => TblMatytalleresDeleteButtonClick(args, tblMatytallereChild)) @onclick:stopPropagation="true" />
+                            </Template>
+                        </RadzenDataGridColumn>
+                      </Columns>
+                </RadzenDataGrid>    </div>
+</div>
